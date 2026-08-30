@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Nx6_PedidosYa::pedidosya" title="PedidosYa" module="Nx6_PedidosYa" sortOrder="71"
+             resource="Nx6_PedidosYa::pedidosya"/>
+        <add id="Nx6_PedidosYa::products_profile" title="Products Profiles" module="Nx6_PedidosYa" sortOrder="10"
+             parent="Nx6_PedidosYa::pedidosya" action="pedidosya/products_profile"
+             resource="Nx6_PedidosYa::products_profile"/>
+        <add id="Nx6_PedidosYa::promo_profile" title="Promo Profiles" module="Nx6_PedidosYa" sortOrder="20"
+             parent="Nx6_PedidosYa::pedidosya" action="pedidosya/promo_profile"
+             resource="Nx6_PedidosYa::promo_profile"/>
+    </menu>
+</config>

@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="nx6_pedidosya_products_profile" resource="default" engine="innodb"
+           comment="Nx6 PedidosYa Products Profile">
+        <column xsi:type="int" name="products_profile_id" unsigned="true" nullable="false" identity="true"
+                comment="Products Profile ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Profile Name"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false"
+                comment="Store View ID"/>
+        <column xsi:type="varchar" name="vendor_id" nullable="false" length="64" comment="PedidosYa Vendor ID"/>
+        <column xsi:type="varchar" name="file_prefix" nullable="false" length="64" comment="File Name Prefix"/>
+        <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" default="1"
+                comment="Is Active"/>
+        <column xsi:type="varchar" name="sku_source" nullable="true" length="128" comment="SKU Source"/>
+        <column xsi:type="varchar" name="sku_default" nullable="true" length="255" comment="SKU Default"/>
+        <column xsi:type="varchar" name="barcode_source" nullable="true" length="128" comment="Barcode Source"/>
+        <column xsi:type="varchar" name="barcode_default" nullable="true" length="255" comment="Barcode Default"/>
+        <column xsi:type="varchar" name="price_source" nullable="true" length="128" comment="Price Source"/>
+        <column xsi:type="varchar" name="price_default" nullable="true" length="255" comment="Price Default"/>
+        <column xsi:type="varchar" name="active_source" nullable="true" length="128" comment="Active Source"/>
+        <column xsi:type="varchar" name="active_default" nullable="true" length="255" comment="Active Default"/>
+        <column xsi:type="varchar" name="quantity_source" nullable="true" length="128" comment="Quantity Source"/>
+        <column xsi:type="varchar" name="quantity_default" nullable="true" length="255" comment="Quantity Default"/>
+        <column xsi:type="varchar" name="vendors_source" nullable="true" length="128" comment="Vendors Source"/>
+        <column xsi:type="varchar" name="vendors_default" nullable="true" length="255" comment="Vendors Default"/>
+        <column xsi:type="varchar" name="exclude_source" nullable="true" length="128" comment="Exclude Source"/>
+        <column xsi:type="varchar" name="exclude_default" nullable="true" length="255" comment="Exclude Default"/>
+        <column xsi:type="text" name="excluded_skus" nullable="true" comment="Excluded SKUs (one per line or comma-separated)"/>
+        <column xsi:type="smallint" name="only_enabled" unsigned="true" nullable="false" default="0"
+                comment="Export Only Enabled Products"/>
+        <column xsi:type="decimal" name="markup_percent" scale="4" precision="12" nullable="true"
+                comment="Markup Percentage Applied To Price"/>
+        <column xsi:type="smallint" name="max_price_enabled" unsigned="true" nullable="false" default="0"
+                comment="Flag Products Above Max Price As Inactive"/>
+        <column xsi:type="decimal" name="max_price" scale="4" precision="12" nullable="true"
+                comment="Max Price (products priced higher are exported with Active set to 0)"/>
+        <column xsi:type="varchar" name="sftp_host" nullable="true" length="255" comment="SFTP Host"/>
+        <column xsi:type="smallint" name="sftp_port" unsigned="true" nullable="true" comment="SFTP Port"/>
+        <column xsi:type="varchar" name="sftp_username" nullable="true" length="255" comment="SFTP Username"/>
+        <column xsi:type="varchar" name="sftp_password" nullable="true" length="255" comment="SFTP Password (encrypted)"/>
+        <column xsi:type="varchar" name="sftp_remote_path" nullable="true" length="255" comment="SFTP Remote Path"/>
+        <column xsi:type="smallint" name="sftp_timeout" unsigned="true" nullable="true" comment="SFTP Connection Timeout"/>
+        <column xsi:type="datetime" name="last_run_at" on_update="false" nullable="true" comment="Last Run At"/>
+        <column xsi:type="varchar" name="last_run_status" nullable="true" length="255" comment="Last Run Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="products_profile_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NX6_PEDIDOSYA_PRODUCTS_PROFILE_STORE_ID_STORE_STORE_ID"
+                    table="nx6_pedidosya_products_profile" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+    </table>
+    <table name="nx6_pedidosya_promo_profile" resource="default" engine="innodb"
+           comment="Nx6 PedidosYa Promo Profile">
+        <column xsi:type="int" name="promo_profile_id" unsigned="true" nullable="false" identity="true"
+                comment="Promo Profile ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Profile Name"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false"
+                comment="Store View ID"/>
+        <column xsi:type="varchar" name="vendor_id" nullable="false" length="64" comment="PedidosYa Vendor ID"/>
+        <column xsi:type="varchar" name="file_prefix" nullable="false" length="64" comment="File Name Prefix"/>
+        <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" default="1"
+                comment="Is Active"/>
+        <column xsi:type="varchar" name="barcode_source" nullable="true" length="128" comment="Barcode Source"/>
+        <column xsi:type="varchar" name="barcode_default" nullable="true" length="255" comment="Barcode Default"/>
+        <column xsi:type="varchar" name="sku_source" nullable="true" length="128" comment="SKU Source"/>
+        <column xsi:type="varchar" name="sku_default" nullable="true" length="255" comment="SKU Default"/>
+        <column xsi:type="varchar" name="campaign_name_source" nullable="true" length="128"
+                comment="Campaign Name Source"/>
+        <column xsi:type="varchar" name="campaign_name_default" nullable="true" length="255"
+                comment="Campaign Name Default"/>
+        <column xsi:type="varchar" name="reason_source" nullable="true" length="128" comment="Reason Source"/>
+        <column xsi:type="varchar" name="reason_default" nullable="true" length="255" comment="Reason Default"/>
+        <column xsi:type="varchar" name="start_date_source" nullable="true" length="128"
+                comment="Start Date Source"/>
+        <column xsi:type="varchar" name="start_date_default" nullable="true" length="255"
+                comment="Start Date Default"/>
+        <column xsi:type="varchar" name="end_date_source" nullable="true" length="128" comment="End Date Source"/>
+        <column xsi:type="varchar" name="end_date_default" nullable="true" length="255" comment="End Date Default"/>
+        <column xsi:type="varchar" name="promotion_type_source" nullable="true" length="128"
+                comment="Promotion Type Source"/>
+        <column xsi:type="varchar" name="promotion_type_default" nullable="true" length="255"
+                comment="Promotion Type Default"/>
+        <column xsi:type="varchar" name="promotion_sub_type_source" nullable="true" length="128"
+                comment="Promotion Sub Type Source"/>
+        <column xsi:type="varchar" name="promotion_sub_type_default" nullable="true" length="255"
+                comment="Promotion Sub Type Default"/>
+        <column xsi:type="varchar" name="discounted_price_source" nullable="true" length="128"
+                comment="Discounted Price Source"/>
+        <column xsi:type="varchar" name="discounted_price_default" nullable="true" length="255"
+                comment="Discounted Price Default"/>
+        <column xsi:type="varchar" name="max_no_of_orders_source" nullable="true" length="128"
+                comment="Max No Of Orders Source"/>
+        <column xsi:type="varchar" name="max_no_of_orders_default" nullable="true" length="255"
+                comment="Max No Of Orders Default"/>
+        <column xsi:type="varchar" name="discount_usage_limit_source" nullable="true" length="128"
+                comment="Discount Usage Limit Source"/>
+        <column xsi:type="varchar" name="discount_usage_limit_default" nullable="true" length="255"
+                comment="Discount Usage Limit Default"/>
+        <column xsi:type="varchar" name="bundle_details_source" nullable="true" length="128"
+                comment="Bundle Details Source"/>
+        <column xsi:type="varchar" name="bundle_details_default" nullable="true" length="255"
+                comment="Bundle Details Default"/>
+        <column xsi:type="varchar" name="bundle_discount_source" nullable="true" length="128"
+                comment="Bundle Discount Source"/>
+        <column xsi:type="varchar" name="bundle_discount_default" nullable="true" length="255"
+                comment="Bundle Discount Default"/>
+        <column xsi:type="varchar" name="campaign_status_source" nullable="true" length="128"
+                comment="Campaign Status Source"/>
+        <column xsi:type="varchar" name="campaign_status_default" nullable="true" length="255"
+                comment="Campaign Status Default"/>
+        <column xsi:type="text" name="included_skus" nullable="true" comment="Included SKUs (one per line or comma-separated)"/>
+        <column xsi:type="smallint" name="use_all_enabled" unsigned="true" nullable="false" default="0"
+                comment="Use All Enabled Products Instead Of Included SKUs"/>
+        <column xsi:type="decimal" name="markdown_percent" scale="4" precision="12" nullable="true"
+                comment="Markdown Percentage Applied To Price For Discounted Price"/>
+        <column xsi:type="varchar" name="sftp_host" nullable="true" length="255" comment="SFTP Host"/>
+        <column xsi:type="smallint" name="sftp_port" unsigned="true" nullable="true" comment="SFTP Port"/>
+        <column xsi:type="varchar" name="sftp_username" nullable="true" length="255" comment="SFTP Username"/>
+        <column xsi:type="varchar" name="sftp_password" nullable="true" length="255" comment="SFTP Password (encrypted)"/>
+        <column xsi:type="varchar" name="sftp_remote_path" nullable="true" length="255" comment="SFTP Remote Path"/>
+        <column xsi:type="smallint" name="sftp_timeout" unsigned="true" nullable="true" comment="SFTP Connection Timeout"/>
+        <column xsi:type="datetime" name="last_run_at" on_update="false" nullable="true" comment="Last Run At"/>
+        <column xsi:type="varchar" name="last_run_status" nullable="true" length="255" comment="Last Run Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="promo_profile_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="NX6_PEDIDOSYA_PROMO_PROFILE_STORE_ID_STORE_STORE_ID"
+                    table="nx6_pedidosya_promo_profile" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+    </table>
+</schema>

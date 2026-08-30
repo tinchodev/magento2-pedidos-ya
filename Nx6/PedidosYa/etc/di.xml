@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="nx6_pedidosya_products_profile_listing_data_source" xsi:type="string">Nx6\PedidosYa\Model\ResourceModel\ProductsProfile\Grid\Collection</item>
+                <item name="nx6_pedidosya_promo_profile_listing_data_source" xsi:type="string">Nx6\PedidosYa\Model\ResourceModel\PromoProfile\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Nx6\PedidosYa\Ui\ProductsProfile\Form\MappingModifier" type="Nx6\PedidosYa\Ui\Component\Form\MappingModifier">
+        <arguments>
+            <argument name="registryKey" xsi:type="string">nx6_pedidosya_products_profile</argument>
+            <argument name="columnsMethod" xsi:type="string">getProductsColumns</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Nx6\PedidosYa\Ui\ProductsProfile\Form\SftpTestConnectionModifier" type="Nx6\PedidosYa\Ui\Component\Form\SftpTestConnectionModifier">
+        <arguments>
+            <argument name="registryKey" xsi:type="string">nx6_pedidosya_products_profile</argument>
+            <argument name="controllerPath" xsi:type="string">pedidosya/products_profile/testConnection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Nx6\PedidosYa\Ui\ProductsProfile\Form\ModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="mapping" xsi:type="array">
+                    <item name="class" xsi:type="string">Nx6\PedidosYa\Ui\ProductsProfile\Form\MappingModifier</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="sftp_test_connection" xsi:type="array">
+                    <item name="class" xsi:type="string">Nx6\PedidosYa\Ui\ProductsProfile\Form\SftpTestConnectionModifier</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Nx6\PedidosYa\Model\ProductsProfile\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Nx6\PedidosYa\Ui\ProductsProfile\Form\ModifierPool</argument>
+        </arguments>
+    </type>
+    <virtualType name="Nx6\PedidosYa\Ui\PromoProfile\Form\MappingModifier" type="Nx6\PedidosYa\Ui\Component\Form\MappingModifier">
+        <arguments>
+            <argument name="registryKey" xsi:type="string">nx6_pedidosya_promo_profile</argument>
+            <argument name="columnsMethod" xsi:type="string">getPromoColumns</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Nx6\PedidosYa\Ui\PromoProfile\Form\SftpTestConnectionModifier" type="Nx6\PedidosYa\Ui\Component\Form\SftpTestConnectionModifier">
+        <arguments>
+            <argument name="registryKey" xsi:type="string">nx6_pedidosya_promo_profile</argument>
+            <argument name="controllerPath" xsi:type="string">pedidosya/promo_profile/testConnection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Nx6\PedidosYa\Ui\PromoProfile\Form\ModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="mapping" xsi:type="array">
+                    <item name="class" xsi:type="string">Nx6\PedidosYa\Ui\PromoProfile\Form\MappingModifier</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="sftp_test_connection" xsi:type="array">
+                    <item name="class" xsi:type="string">Nx6\PedidosYa\Ui\PromoProfile\Form\SftpTestConnectionModifier</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Nx6\PedidosYa\Model\PromoProfile\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Nx6\PedidosYa\Ui\PromoProfile\Form\ModifierPool</argument>
+        </arguments>
+    </type>
+    <virtualType name="Nx6\PedidosYa\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/pedidosya.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Nx6\PedidosYa\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">pedidosyaLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Nx6\PedidosYa\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="pedidosya_export_run" xsi:type="object">Nx6\PedidosYa\Console\Command\RunExportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Nx6\PedidosYa\Console\Command\RunExportCommand">
+        <arguments>
+            <argument name="logger" xsi:type="object">Nx6\PedidosYa\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Nx6\PedidosYa\Model\Export\ExportRunner">
+        <arguments>
+            <argument name="logger" xsi:type="object">Nx6\PedidosYa\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Nx6\PedidosYa\Model\Export\Generator">
+        <arguments>
+            <argument name="logger" xsi:type="object">Nx6\PedidosYa\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Nx6\PedidosYa\Model\Sftp\Client">
+        <arguments>
+            <argument name="logger" xsi:type="object">Nx6\PedidosYa\Logger\Logger</argument>
+        </arguments>
+    </type>
+</config>

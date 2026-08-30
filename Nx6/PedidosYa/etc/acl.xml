@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Nx6_PedidosYa::pedidosya" title="PedidosYa" sortOrder="71">
+                    <resource id="Nx6_PedidosYa::products_profile" title="Products Profiles" sortOrder="10"/>
+                    <resource id="Nx6_PedidosYa::promo_profile" title="Promo Profiles" sortOrder="20"/>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Nx6_PedidosYa::config"
+                                      title="PedidosYa Export Configuration"
+                                      sortOrder="10"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

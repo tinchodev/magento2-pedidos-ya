@@ -1,0 +1,46 @@
+/**
+ * Styles the "CSV Field Mapping" table built by Nx6\PedidosYa\Ui\Component\Form\MappingModifier
+ * (see view/adminhtml/web/template/mapping-table.html). The ".nx6py-map" hook is the fieldset
+ * wrapper (declared via additionalClasses in the form XML); ".nx6py-map-table" is the table itself.
+ */
+.nx6py-map {
+    background: #f5f5f5;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.nx6py-map-table {
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.nx6py-map-table th,
+.nx6py-map-table td {
+    padding: 10px 18px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.nx6py-map-table thead th {
+    font-weight: 600;
+    font-size: 17px;
+    text-align: left;
+}
+
+.nx6py-map-table tbody th.nx6py-map-col-title {
+    text-align: left;
+}
+
+.nx6py-map-table .admin__field {
+    margin: 0;
+}
+
+/**
+ * The "Test Connection" button (Nx6\PedidosYa\Ui\Component\Form\SftpTestConnectionModifier)
+ * renders as a bare <button> with no field wrapper, so it needs to be floated right itself to
+ * align with the rest of the SFTP Settings fieldset instead of sitting flush left.
+ */
+.nx6py-test-connection-btn {
+    float: right;
+}

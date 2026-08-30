@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Nx6_PedidosYa::css/mapping-table.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="nx6_pedidosya_products_profile_form"/>
+        </referenceContainer>
+    </body>
+</page>

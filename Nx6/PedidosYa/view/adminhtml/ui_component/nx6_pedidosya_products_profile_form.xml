@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">nx6_pedidosya_products_profile_form.nx6_pedidosya_products_profile_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Products Profile</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Nx6\PedidosYa\Block\Adminhtml\ProductsProfile\Edit\BackButton"/>
+            <button name="delete" class="Nx6\PedidosYa\Block\Adminhtml\ProductsProfile\Edit\DeleteButton"/>
+            <button name="run" class="Nx6\PedidosYa\Block\Adminhtml\ProductsProfile\Edit\RunButton"/>
+            <button name="save" class="Nx6\PedidosYa\Block\Adminhtml\ProductsProfile\Edit\SaveButton"/>
+        </buttons>
+        <namespace>nx6_pedidosya_products_profile_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>nx6_pedidosya_products_profile_form.nx6_pedidosya_products_profile_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="nx6_pedidosya_products_profile_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="pedidosya/products_profile/save"/>
+        </settings>
+        <dataProvider class="Nx6\PedidosYa\Model\ProductsProfile\DataProvider" name="nx6_pedidosya_products_profile_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>products_profile_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">General Information</label>
+        </settings>
+        <field name="products_profile_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>products_profile_id</dataScope>
+            </settings>
+        </field>
+        <field name="name" sortOrder="5" formElement="input">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Profile Name</label>
+                <notice translate="true">A short label to identify this profile, e.g. "Uruguay - Main Catalog". Not sent to PedidosYa.</notice>
+                <dataScope>name</dataScope>
+            </settings>
+        </field>
+        <field name="is_active" sortOrder="10" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Active</label>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="store_id" sortOrder="20" formElement="select">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Store View</label>
+                <dataScope>store_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Store"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="vendor_id" sortOrder="30" formElement="input">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Vendor ID</label>
+                <notice translate="true">The PedidosYa external store ID (from the Partner Portal), used in the exported file name.</notice>
+                <dataScope>vendor_id</dataScope>
+            </settings>
+        </field>
+        <field name="file_prefix" sortOrder="40" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">products</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">File Prefix</label>
+                <notice translate="true">Final remote file name will be "&lt;prefix&gt;_&lt;vendor id&gt;.csv".</notice>
+                <dataScope>file_prefix</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="options">
+        <settings>
+            <label translate="true">Export Options</label>
+        </settings>
+        <field name="only_enabled" sortOrder="5" formElement="checkbox">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Only Enabled</label>
+                <notice translate="true">When checked, only enabled products are exported.</notice>
+                <dataScope>only_enabled</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="markup_percent" sortOrder="10" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Markup Percentage</label>
+                <notice translate="true">Optional. Added on top of the resolved Price value, e.g. to cover a marketplace fee. "10" turns a 100.00 price into 110.00.</notice>
+                <dataScope>markup_percent</dataScope>
+            </settings>
+        </field>
+        <field name="excluded_skus" sortOrder="20" formElement="textarea">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">SKUs to Exclude</label>
+                <notice translate="true">One SKU per line or comma-separated. These products are always left out of the export, regardless of the "Exclude" column mapping below.</notice>
+                <dataScope>excluded_skus</dataScope>
+            </settings>
+            <formElements>
+                <textarea>
+                    <settings>
+                        <rows>5</rows>
+                    </settings>
+                </textarea>
+            </formElements>
+        </field>
+        <field name="max_price_enabled" sortOrder="30" formElement="checkbox">
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Flag Above Max Price as Inactive</label>
+                <notice translate="true">When checked, products priced above "Max Price" below are still exported, but with Active set to 0.</notice>
+                <dataScope>max_price_enabled</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="max_price" sortOrder="40" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Max Price</label>
+                <notice translate="true">Used only when "Flag Above Max Price as Inactive" is checked. Products with an exported Price above this value are exported with Active set to 0.</notice>
+                <dataScope>max_price</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="sftp">
+        <settings>
+            <label translate="true">SFTP Settings</label>
+        </settings>
+        <field name="sftp_host" sortOrder="10" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Host</label>
+                <notice translate="true">Each profile connects to its own SFTP server - these credentials are not shared with other profiles.</notice>
+                <dataScope>sftp_host</dataScope>
+            </settings>
+        </field>
+        <field name="sftp_port" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">22</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Port</label>
+                <dataScope>sftp_port</dataScope>
+            </settings>
+        </field>
+        <field name="sftp_username" sortOrder="30" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Username</label>
+                <dataScope>sftp_username</dataScope>
+            </settings>
+        </field>
+        <field name="sftp_password" sortOrder="40" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="inputType" xsi:type="string">password</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Password</label>
+                <notice translate="true">Leave blank to keep the currently saved password.</notice>
+                <dataScope>sftp_password</dataScope>
+            </settings>
+        </field>
+        <field name="sftp_remote_path" sortOrder="50" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="string">catalog</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Remote Path</label>
+                <notice translate="true">Remote SFTP directory the CSV file is uploaded into, e.g. "catalog".</notice>
+                <dataScope>sftp_remote_path</dataScope>
+            </settings>
+        </field>
+        <field name="sftp_timeout" sortOrder="60" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">10</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Connection Timeout (seconds)</label>
+                <dataScope>sftp_timeout</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+    <!-- Rows are generated per export column by Nx6\PedidosYa\Ui\Component\Form\MappingModifier. -->
+    <fieldset name="mapping">
+        <settings>
+            <label translate="true">CSV Field Mapping</label>
+            <additionalClasses>
+                <class name="nx6py-map">true</class>
+            </additionalClasses>
+        </settings>
+    </fieldset>
+</form>

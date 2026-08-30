@@ -1,0 +1,6 @@
+sku,barcode,campaign_name,reason,start_date,end_date,promotion_type,promotion_sub_type,discounted_price,max_no_of_orders,discount_usage_limit,bundle_details,bundle_discount,campaign_status
+ar45001,,Verano2025,SALE,2025-07-01 00:00:00,2025-07-31 23:59:59,strikethrough,,299.90,500,1,,,1
+ar45002,,,,,,strikethrough,,149.50,,,,,
+,7891234567890,Verano2025,SALE,2025-07-01 00:00:00,2025-07-31 23:59:59,strikethrough,,89.00,,,,,
+ar45010,,Promo3x2,SFTP Demo,2025-07-05 00:00:00,2025-07-20 23:59:59,same_item_bundle,free_item,,,1,B2G1,,1
+ar45011,,Promo3x2,SFTP Demo,2025-07-05 00:00:00,2025-07-20 23:59:59,same_item_bundle,absolute_value_off,,,2,B3G1,15,1

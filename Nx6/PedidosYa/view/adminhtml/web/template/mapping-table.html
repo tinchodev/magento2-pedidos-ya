@@ -1,0 +1,31 @@
+<!--
+/**
+ * Renders the CSV field mapping as a real table: one row per export column.
+ *
+ * "elems" are the row components built by Nx6\PedidosYa\Ui\Component\Form\MappingModifier;
+ * each one holds two field components (source, default) in its own "elems".
+ *
+ * Bindings are deliberately written in knockout comment form rather than with
+ * Magento's custom binding elements: those are real tags, so the HTML parser
+ * would hoist them out of the table body. Comments survive inside a table.
+ */
+-->
+<table class="nx6py-map-table">
+    <thead>
+        <tr>
+            <th class="nx6py-map-col-title" data-bind="i18n: 'Title'"></th>
+            <th class="nx6py-map-col-attr" data-bind="i18n: 'Attribute'"></th>
+            <th class="nx6py-map-col-default" data-bind="i18n: 'Default Value'"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ko foreach: { data: elems, as: 'row' } -->
+        <tr>
+            <th class="nx6py-map-col-title" scope="row" data-bind="text: row.label"></th>
+            <!-- ko foreach: { data: row.elems, as: 'cell' } -->
+            <td><!-- ko template: cell.elementTmpl --><!-- /ko --></td>
+            <!-- /ko -->
+        </tr>
+        <!-- /ko -->
+    </tbody>
+</table>

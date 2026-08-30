@@ -1,0 +1,25 @@
+/**
+ * Custom admin menu icon for the top-level "PedidosYa" menu group (etc/adminhtml/menu.xml, id
+ * "Nx6_PedidosYa::pedidosya"). Magento\Backend\Block\Menu::renderNavigation() builds the <li>
+ * class from only the part of the menu id AFTER THE LAST "::", lowercased with "_" -> "-" - so
+ * "Nx6_PedidosYa::pedidosya" becomes class "item-pedidosya", not "menu-nx6-pedidosya-pedidosya".
+ * The icon itself is an :before pseudo-element on the <a>, not a separate icon span - confirmed
+ * against the compiled core rule this overrides: ".admin__menu .level-0 > a:before" (icon-font
+ * glyph '\e63a', the default hexagon fallback). That core rule has equal CSS specificity to this
+ * one, so !important on content/background is needed to reliably win regardless of <head> asset
+ * load order.
+ *
+ * The default glyph centers itself via the inherited "text-align: center" on the <a> (the glyph
+ * is inline text content inside a full-width block box). A background-image isn't inline content,
+ * so with an explicit fixed width it just sits at the box's left edge instead - "margin: 0 auto"
+ * centers the fixed-width box itself within the <a>.
+ */
+.admin__menu .item-pedidosya > a:before {
+    content: '' !important;
+    display: block;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin: 0 auto .3rem;
+    background: url('../images/pedidosya-cream.svg') no-repeat center center !important;
+    background-size: 2.2rem 2.2rem !important;
+}

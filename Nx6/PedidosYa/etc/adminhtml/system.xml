@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="farma" translate="label" sortOrder="300">
+            <label>Farma</label>
+        </tab>
+
+        <section id="nx6_pedidosya" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>PedidosYa</label>
+            <tab>farma</tab>
+            <resource>Nx6_PedidosYa::config</resource>
+
+            <group id="archive" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>File Archiving</label>
+
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Archive Export Files</label>
+                    <comment>When enabled, every generated Products/Promo Profile export file is also saved to var/export/peya as a timestamped .tar.gz, in addition to being uploaded via SFTP.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+
+            <group id="export" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Products Export</label>
+
+                <field id="blacklisted_product_names" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Blacklisted Product Names (Auto-Disable)</label>
+                    <comment>One name per line (e.g. "RIVOTRIL"). Products whose name contains any of these as a whole word are exported with Active forced to 0 in the Products Profile CSV, regardless of Magento's enabled status or available stock.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

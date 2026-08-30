@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">nx6_pedidosya_promo_profile_listing.nx6_pedidosya_promo_profile_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add Promo Profile</label>
+            </button>
+        </buttons>
+        <spinner>nx6_pedidosya_promo_profile_columns</spinner>
+        <deps>
+            <dep>nx6_pedidosya_promo_profile_listing.nx6_pedidosya_promo_profile_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="nx6_pedidosya_promo_profile_listing_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">promo_profile_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Nx6_PedidosYa::promo_profile</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                       name="nx6_pedidosya_promo_profile_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>promo_profile_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="nx6_pedidosya_promo_profile_columns">
+        <column name="promo_profile_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="name">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Profile Name</label>
+            </settings>
+        </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="vendor_id">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Vendor ID</label>
+            </settings>
+        </column>
+        <column name="file_prefix">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">File Prefix</label>
+            </settings>
+        </column>
+        <column name="is_active" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Active</label>
+            </settings>
+        </column>
+        <column name="last_run_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Last Run</label>
+            </settings>
+        </column>
+        <column name="last_run_status">
+            <settings>
+                <filter>text</filter>
+                <sortable>false</sortable>
+                <label translate="true">Last Run Status</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Nx6\PedidosYa\Ui\Component\Listing\Column\PromoProfileActions">
+            <settings>
+                <indexField>promo_profile_id</indexField>
+                <sortable>false</sortable>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
