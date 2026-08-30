@@ -1,5 +1,11 @@
 # Nx6_PedidosYa
 
+[![Magento 2](https://img.shields.io/badge/Magento-2.4-f46f25.svg?style=flat-square)](https://magento.com/)
+[![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777bb4.svg?style=flat-square)](https://www.php.net/)
+[![Rector](https://img.shields.io/badge/Rector-enabled-8a2be2.svg?style=flat-square)](https://github.com/rectorphp/rector)
+[![PHP-CS-Fixer](https://img.shields.io/badge/code%20style-PHP--CS--Fixer-46a2f1.svg?style=flat-square)](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](./LICENSE)
+
 Magento 2 module that exports your catalog and your promotions to **PedidosYa**
 (Local Shops / Quick Commerce) as CSV files delivered over **SFTP**.
 
@@ -13,8 +19,6 @@ PedidosYa store, each named `<prefix>_<vendor_id>.csv`.
 | Package | `nx6/pedidosya` |
 | Module | `Nx6_PedidosYa` |
 | Version | `0.1.0` |
-| PHP | `>= 8.3` |
-| License | MIT |
 
 ---
 
