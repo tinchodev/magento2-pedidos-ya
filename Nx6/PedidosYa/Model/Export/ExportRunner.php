@@ -39,21 +39,21 @@ class ExportRunner
             $credentials = $this->credentialsBuilder->fromProfile($profile);
 
             $summaries = [];
-            foreach ($batches as $result) {
-                $this->archiver->archive($result['path'], $result['filename']);
-                $this->sftpClient->uploadFile($result['path'], $credentials, $result['filename']);
-                $summaries[] = sprintf('%d rows uploaded to %s/%s', $result['rows'], $credentials->remotePath, $result['filename']);
+            foreach ($batches as $batch) {
+                $this->archiver->archive($batch['path'], $batch['filename']);
+                $this->sftpClient->uploadFile($batch['path'], $credentials, $batch['filename']);
+                $summaries[] = sprintf('%d rows uploaded to %s/%s', $batch['rows'], $credentials->remotePath, $batch['filename']);
             }
 
             $status = implode('; ', $summaries);
             $this->persistResult($profile, $status);
 
             return $status;
-        } catch (\Throwable $e) {
-            $this->logger->error(sprintf('PedidosYa export failed for profile #%d: %s', $profile->getId(), $e->getMessage()));
-            $this->persistResult($profile, 'Error: ' . $e->getMessage());
+        } catch (\Throwable $throwable) {
+            $this->logger->error(sprintf('PedidosYa export failed for profile #%d: %s', $profile->getId(), $throwable->getMessage()));
+            $this->persistResult($profile, 'Error: ' . $throwable->getMessage());
 
-            throw $e;
+            throw $throwable;
         }
     }
 

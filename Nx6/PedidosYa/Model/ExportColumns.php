@@ -18,7 +18,7 @@ class ExportColumns
      */
     public const STOCK_MAPPABLE_COLUMN = 'quantity';
 
-    private const PRODUCTS_COLUMNS = [
+    private const array PRODUCTS_COLUMNS = [
         'sku' => 'SKU',
         'barcode' => 'Barcode',
         'price' => 'Price',
@@ -28,7 +28,7 @@ class ExportColumns
         'exclude' => 'Exclude',
     ];
 
-    private const PROMO_COLUMNS = [
+    private const array PROMO_COLUMNS = [
         'barcode' => 'Barcode',
         'sku' => 'SKU',
         'campaign_name' => 'Campaign Name',

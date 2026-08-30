@@ -8,6 +8,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class ProductsProfile extends AbstractDb
 {
+    #[\Override]
     protected function _construct(): void
     {
         $this->_init('nx6_pedidosya_products_profile', 'products_profile_id');

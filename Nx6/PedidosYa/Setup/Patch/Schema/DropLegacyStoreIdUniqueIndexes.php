@@ -16,7 +16,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
  */
 class DropLegacyStoreIdUniqueIndexes implements SchemaPatchInterface
 {
-    private const TABLE_FK_INDEXES = [
+    private const array TABLE_FK_INDEXES = [
         'nx6_pedidosya_products_profile' => 'NX6_PEDIDOSYA_PRODUCTS_PROFILE_STORE_ID_STORE_STORE_ID',
         'nx6_pedidosya_promo_profile' => 'NX6_PEDIDOSYA_PROMO_PROFILE_STORE_ID_STORE_STORE_ID',
     ];
@@ -26,25 +26,28 @@ class DropLegacyStoreIdUniqueIndexes implements SchemaPatchInterface
     ) {
     }
 
+    #[\Override]
     public function apply(): void
     {
         $this->schemaSetup->startSetup();
-        $connection = $this->schemaSetup->getConnection();
+        $adapter = $this->schemaSetup->getConnection();
 
         foreach (self::TABLE_FK_INDEXES as $table => $fkIndexName) {
             $tableName = $this->schemaSetup->getTable($table);
-            if (!$connection->isTableExists($tableName)) {
+            if (!$adapter->isTableExists($tableName)) {
                 continue;
             }
 
-            $indexList = $connection->getIndexList($tableName);
+            $indexList = $adapter->getIndexList($tableName);
             $existingIndexNames = array_column($indexList, 'KEY_NAME');
 
             foreach ($indexList as $index) {
-                if ($index['INDEX_TYPE'] !== 'unique' || $index['COLUMNS_LIST'] !== ['store_id']) {
+                if ($index['INDEX_TYPE'] !== 'unique') {
                     continue;
                 }
-
+                if ($index['COLUMNS_LIST'] !== ['store_id']) {
+                    continue;
+                }
                 // MySQL refuses to drop the index backing a foreign key unless another
                 // index on the same column already exists, so add the replacement first.
                 // indexExists() isn't part of AdapterInterface (only Magento's core Pdo\Mysql
@@ -52,21 +55,23 @@ class DropLegacyStoreIdUniqueIndexes implements SchemaPatchInterface
                 // Firebear_ImportExport's adapter interceptor, which doesn't proxy it - so
                 // check against the index list already fetched above instead.
                 if (!in_array($fkIndexName, $existingIndexNames, true)) {
-                    $connection->addIndex($tableName, $fkIndexName, ['store_id']);
+                    $adapter->addIndex($tableName, $fkIndexName, ['store_id']);
                 }
 
-                $connection->dropIndex($tableName, $index['KEY_NAME']);
+                $adapter->dropIndex($tableName, $index['KEY_NAME']);
             }
         }
 
         $this->schemaSetup->endSetup();
     }
 
+    #[\Override]
     public static function getDependencies(): array
     {
         return [];
     }
 
+    #[\Override]
     public function getAliases(): array
     {
         return [];

@@ -15,9 +15,9 @@ use Nx6\PedidosYa\Model\PromoProfile;
  */
 class CredentialsBuilder
 {
-    private const DEFAULT_PORT = 22;
+    private const int DEFAULT_PORT = 22;
 
-    private const DEFAULT_TIMEOUT = 10;
+    private const int DEFAULT_TIMEOUT = 10;
 
     public function __construct(
         private readonly EncryptorInterface $encryptor

@@ -16,6 +16,7 @@ class PromotionType implements OptionSourceInterface
 
     public const STRIKETHROUGH = 'strikethrough';
 
+    #[\Override]
     public function toOptionArray(): array
     {
         return [

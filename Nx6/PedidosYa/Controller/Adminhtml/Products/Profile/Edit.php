@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nx6\PedidosYa\Controller\Adminhtml\Products\Profile;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultInterface;
@@ -15,7 +16,7 @@ use Nx6\PedidosYa\Model\ProductsProfileFactory;
 class Edit extends Profile implements HttpGetActionInterface
 {
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        Context $context,
         private readonly PageFactory $resultPageFactory,
         private readonly Registry $coreRegistry,
         private readonly ProductsProfileFactory $productsProfileFactory
@@ -23,14 +24,15 @@ class Edit extends Profile implements HttpGetActionInterface
         parent::__construct($context);
     }
 
+    #[\Override]
     public function execute(): ResultInterface
     {
         $id = (int) $this->getRequest()->getParam('id');
-        $model = $this->productsProfileFactory->create();
+        $productsProfile = $this->productsProfileFactory->create();
 
-        if ($id) {
-            $model->load($id);
-            if (!$model->getId()) {
+        if ($id !== 0) {
+            $productsProfile->load($id);
+            if (!$productsProfile->getId()) {
                 $this->messageManager->addErrorMessage(__('This products profile no longer exists.'));
 
                 /** @var Redirect $resultRedirect */
@@ -40,16 +42,16 @@ class Edit extends Profile implements HttpGetActionInterface
             }
         }
 
-        $this->coreRegistry->register('nx6_pedidosya_products_profile', $model);
+        $this->coreRegistry->register('nx6_pedidosya_products_profile', $productsProfile);
 
         $resultPage = $this->resultPageFactory->create();
         $this->initPage($resultPage);
         $resultPage->addBreadcrumb(
-            $id ? __('Edit Products Profile') : __('New Products Profile'),
-            $id ? __('Edit Products Profile') : __('New Products Profile')
+            $id !== 0 ? __('Edit Products Profile') : __('New Products Profile'),
+            $id !== 0 ? __('Edit Products Profile') : __('New Products Profile')
         );
         $resultPage->getConfig()->getTitle()->prepend(
-            $id ? __('Edit Products Profile #%1', $id) : __('New Products Profile')
+            $id !== 0 ? __('Edit Products Profile #%1', $id) : __('New Products Profile')
         );
 
         return $resultPage;

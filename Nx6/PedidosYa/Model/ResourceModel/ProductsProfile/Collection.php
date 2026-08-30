@@ -12,6 +12,7 @@ class Collection extends AbstractCollection
 {
     protected $_idFieldName = 'products_profile_id';
 
+    #[\Override]
     protected function _construct(): void
     {
         $this->_init(ProductsProfile::class, ProductsProfileResource::class);

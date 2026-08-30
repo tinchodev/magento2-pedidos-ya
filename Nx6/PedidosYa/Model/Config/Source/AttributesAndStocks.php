@@ -22,6 +22,7 @@ class AttributesAndStocks extends Attributes
         parent::__construct($attributeCollectionFactory);
     }
 
+    #[\Override]
     public function toOptionArray(): array
     {
         $options = parent::toOptionArray();
@@ -34,7 +35,7 @@ class AttributesAndStocks extends Attributes
             ];
         }
 
-        if ($stockOptions) {
+        if ($stockOptions !== []) {
             $options[] = [
                 'label' => __('Stocks'),
                 'value' => $stockOptions,
@@ -49,7 +50,7 @@ class AttributesAndStocks extends Attributes
             ];
         }
 
-        if ($sourceOptions) {
+        if ($sourceOptions !== []) {
             $options[] = [
                 'label' => __('Sources'),
                 'value' => $sourceOptions,

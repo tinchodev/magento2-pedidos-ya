@@ -12,6 +12,7 @@ class Collection extends AbstractCollection
 {
     protected $_idFieldName = 'promo_profile_id';
 
+    #[\Override]
     protected function _construct(): void
     {
         $this->_init(PromoProfile::class, PromoProfileResource::class);

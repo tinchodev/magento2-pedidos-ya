@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nx6\PedidosYa\Model\Export;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -25,14 +26,14 @@ use Psr\Log\LoggerInterface;
  */
 class Generator
 {
-    private const PAGE_SIZE = 1000;
+    private const int PAGE_SIZE = 1000;
 
     /**
      * PedidosYa's promotions SFTP integration rejects any file over 20,000 rows including the
      * header - so a promo batch tops out at 19,999 data rows. Products Profile exports aren't
      * covered by that limit and are never split.
      */
-    private const PROMO_MAX_ROWS_PER_BATCH = 19999;
+    private const int PROMO_MAX_ROWS_PER_BATCH = 19999;
 
     public function __construct(
         private readonly ExportColumns $exportColumns,
@@ -68,8 +69,8 @@ class Generator
         // Promo, not "all enabled", and nothing listed: there's nothing to export.
         $nothingToExport = $isPromo && !$useAllEnabled && !$includedSkus;
 
-        $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $varDir->create('pedidosya/export');
+        $write = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $write->create('pedidosya/export');
 
         // Working filenames key off the profile ID (not the file prefix/vendor ID) since the
         // final, batch-numbered names aren't known until generation finishes - a Promo Profile
@@ -80,10 +81,10 @@ class Generator
         $batchNumber = 0;
         $stream = null;
 
-        $openBatch = function () use (&$stream, &$batchNumber, &$batches, $varDir, $workingPathPrefix, $columns): void {
+        $openBatch = function () use (&$stream, &$batchNumber, &$batches, $write, $workingPathPrefix, $columns): void {
             $batchNumber++;
             $relativePath = $workingPathPrefix . $batchNumber . '.csv';
-            $stream = $varDir->openFile($relativePath, 'w+');
+            $stream = $write->openFile($relativePath, 'w+');
             $stream->writeCsv($columns);
             $batches[] = ['relativePath' => $relativePath, 'rows' => 0];
         };
@@ -98,11 +99,13 @@ class Generator
                 if ($isPromo && (float) $profile->getData('markdown_percent') > 0) {
                     $attributeCodes[] = 'price';
                 }
+
                 if (!$isPromo) {
                     // Name isn't a mapped CSV column, but is needed to check the product
                     // against the blacklisted-names setting below.
                     $attributeCodes[] = 'name';
                 }
+
                 $sourceCodes = $this->collectSourceCodes($profile, $columns);
 
                 $collection = $this->productCollectionFactory->create();
@@ -111,7 +114,7 @@ class Generator
 
                 if ($useAllEnabled || $onlyEnabled) {
                     $collection->addAttributeToFilter('status', Status::STATUS_ENABLED);
-                } elseif ($includedSkus) {
+                } elseif ($includedSkus !== []) {
                     $collection->addAttributeToFilter('sku', ['in' => $includedSkus]);
                 }
 
@@ -188,7 +191,7 @@ class Generator
             $stream?->close();
         }
 
-        return $this->finalizeBatches($varDir, $batches, $profile, $isPromo);
+        return $this->finalizeBatches($write, $batches, $profile, $isPromo);
     }
 
     /**
@@ -202,7 +205,7 @@ class Generator
      * @return array{path: string, filename: string, rows: int}[]
      */
     private function finalizeBatches(
-        WriteInterface $varDir,
+        WriteInterface $write,
         array $batches,
         ProductsProfile|PromoProfile $profile,
         bool $isPromo
@@ -217,11 +220,11 @@ class Generator
             $finalRelativePath = 'pedidosya/export/' . $filename;
 
             if ($batch['relativePath'] !== $finalRelativePath) {
-                $varDir->renameFile($batch['relativePath'], $finalRelativePath);
+                $write->renameFile($batch['relativePath'], $finalRelativePath);
             }
 
             $results[] = [
-                'path' => $varDir->getAbsolutePath($finalRelativePath),
+                'path' => $write->getAbsolutePath($finalRelativePath),
                 'filename' => $filename,
                 'rows' => $batch['rows'],
             ];
@@ -235,7 +238,7 @@ class Generator
      * client-specific fallback when a mapped column resolves empty).
      *
      * @param string[] $columns
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array<string, array<string, float>> $sourceQtyByCodeAndSku
      * @return array<string, string>
      */
@@ -250,7 +253,7 @@ class Generator
         foreach ($columns as $column) {
             $source = (string) $profile->getData($column . '_source');
             $default = (string) $profile->getData($column . '_default');
-            $value = $this->resolveValue($source, $default, $product, $storeId, $sourceQtyByCodeAndSku);
+            $value = $this->resolveValue($source, $default, $product, $sourceQtyByCodeAndSku);
 
             if ($column === 'barcode') {
                 $value = $this->normalizeBarcode($value);
@@ -293,7 +296,7 @@ class Generator
      * batch-size limits (the promo 19,999-row split) are applied per returned row.
      *
      * @param string[] $columns
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array<string, string> $row
      * @return array<int, array<string, string>>
      */
@@ -311,9 +314,9 @@ class Generator
      * marketplace fee shaved off each sale. Left untouched when no markup is configured or the
      * resolved value isn't numeric (a literal default like "N/A" has nothing to mark up).
      */
-    private function applyMarkup(string $value, ProductsProfile $profile): string
+    private function applyMarkup(string $value, ProductsProfile $productsProfile): string
     {
-        $markupPercent = (float) $profile->getData('markup_percent');
+        $markupPercent = (float) $productsProfile->getData('markup_percent');
 
         if ($markupPercent <= 0 || !is_numeric($value)) {
             return $value;
@@ -376,9 +379,9 @@ class Generator
      * instead of configuring a per-column source/default. Returns null (leave the mapped value
      * alone) when no markdown is configured or the product has no numeric base price.
      */
-    private function applyMarkdown(PromoProfile $profile, $product): ?string
+    private function applyMarkdown(PromoProfile $promoProfile, $product): ?string
     {
-        $markdownPercent = (float) $profile->getData('markdown_percent');
+        $markdownPercent = (float) $promoProfile->getData('markdown_percent');
         if ($markdownPercent <= 0) {
             return null;
         }
@@ -398,7 +401,6 @@ class Generator
         string $source,
         string $default,
         $product,
-        int $storeId,
         array $sourceQtyByCodeAndSku
     ): string {
         $value = null;
@@ -493,11 +495,11 @@ class Generator
             foreach ($this->sourceItemRepository->getList($searchCriteria)->getItems() as $sourceItem) {
                 $map[(string) $sourceItem->getSourceCode()][(string) $sourceItem->getSku()] = $sourceItem->getQuantity();
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             $this->logger->warning(sprintf(
                 'Could not prefetch source quantities for sources [%s]: %s',
                 implode(',', $sourceCodes),
-                $e->getMessage()
+                $throwable->getMessage()
             ));
         }
 

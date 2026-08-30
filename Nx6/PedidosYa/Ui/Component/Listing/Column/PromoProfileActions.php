@@ -21,7 +21,7 @@ class PromoProfileActions extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        private readonly UrlInterface $urlBuilder,
+        private readonly UrlInterface $url,
         private readonly Escaper $escaper,
         array $components = [],
         array $data = []
@@ -29,6 +29,7 @@ class PromoProfileActions extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
+    #[\Override]
     public function prepareDataSource(array $dataSource): array
     {
         if (!isset($dataSource['data']['items'])) {
@@ -43,11 +44,11 @@ class PromoProfileActions extends Column
             $name = $this->escaper->escapeHtmlAttr($item['vendor_id'] ?? '');
             $item[$this->getData('name')] = [
                 'edit' => [
-                    'href' => $this->urlBuilder->getUrl(self::URL_PATH_EDIT, ['id' => $item['promo_profile_id']]),
+                    'href' => $this->url->getUrl(self::URL_PATH_EDIT, ['id' => $item['promo_profile_id']]),
                     'label' => __('Edit'),
                 ],
                 'run' => [
-                    'href' => $this->urlBuilder->getUrl(self::URL_PATH_RUN, ['id' => $item['promo_profile_id']]),
+                    'href' => $this->url->getUrl(self::URL_PATH_RUN, ['id' => $item['promo_profile_id']]),
                     'label' => __('Run Now'),
                     'confirm' => [
                         'title' => __('Run Export'),
@@ -56,7 +57,7 @@ class PromoProfileActions extends Column
                     'post' => true,
                 ],
                 'delete' => [
-                    'href' => $this->urlBuilder->getUrl(self::URL_PATH_DELETE, ['id' => $item['promo_profile_id']]),
+                    'href' => $this->url->getUrl(self::URL_PATH_DELETE, ['id' => $item['promo_profile_id']]),
                     'label' => __('Delete'),
                     'confirm' => [
                         'title' => __('Delete "%1"', $name),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nx6\PedidosYa\Block\Adminhtml\ProductsProfile\Edit;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
@@ -14,6 +15,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class RunButton extends GenericButton implements ButtonProviderInterface
 {
+    #[\Override]
     public function getButtonData(): array
     {
         $id = $this->getProfileId();
@@ -48,7 +50,7 @@ class RunButton extends GenericButton implements ButtonProviderInterface
         );
     }
 
-    private function escapeJs(string|\Magento\Framework\Phrase $value): string
+    private function escapeJs(string|Phrase $value): string
     {
         return str_replace(["\\", "'", "\n", "\r"], ["\\\\", "\\'", '', ''], (string) $value);
     }

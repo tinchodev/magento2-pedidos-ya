@@ -8,6 +8,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Registry;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Nx6\PedidosYa\Model\PromoProfile;
 use Nx6\PedidosYa\Model\ResourceModel\PromoProfile\CollectionFactory;
 
 class DataProvider extends AbstractDataProvider
@@ -33,6 +34,7 @@ class DataProvider extends AbstractDataProvider
      * The "mapping" fieldset is empty in the form XML; its rows are injected by the
      * modifier pool from ExportColumns. See Nx6\PedidosYa\Ui\Component\Form\MappingModifier.
      */
+    #[\Override]
     public function getMeta(): array
     {
         $meta = parent::getMeta();
@@ -44,6 +46,7 @@ class DataProvider extends AbstractDataProvider
         return $meta;
     }
 
+    #[\Override]
     public function getData(): array
     {
         if ($this->loadedData !== null) {
@@ -52,7 +55,7 @@ class DataProvider extends AbstractDataProvider
 
         $this->loadedData = [];
 
-        /** @var \Nx6\PedidosYa\Model\PromoProfile $model */
+        /** @var PromoProfile $model */
         $model = $this->coreRegistry->registry('nx6_pedidosya_promo_profile');
 
         if ($model) {

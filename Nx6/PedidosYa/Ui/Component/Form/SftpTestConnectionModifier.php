@@ -21,27 +21,29 @@ class SftpTestConnectionModifier implements ModifierInterface
     /**
      * Name of the fieldset declared in both ui_component form XMLs.
      */
-    private const FIELDSET = 'sftp';
+    private const string FIELDSET = 'sftp';
 
     public function __construct(
         private readonly Registry $coreRegistry,
-        private readonly UrlInterface $urlBuilder,
+        private readonly UrlInterface $url,
         private readonly string $registryKey,
         private readonly string $controllerPath
     ) {
     }
 
+    #[\Override]
     public function modifyData(array $data): array
     {
         return $data;
     }
 
+    #[\Override]
     public function modifyMeta(array $meta): array
     {
         $model = $this->coreRegistry->registry($this->registryKey);
         $id = $model ? (int) $model->getId() : 0;
 
-        if (!$id) {
+        if ($id === 0) {
             return $meta;
         }
 
@@ -53,7 +55,7 @@ class SftpTestConnectionModifier implements ModifierInterface
                         'component' => 'Nx6_PedidosYa/js/sftp-test-connection',
                         'formElement' => 'container',
                         'title' => __('Test Connection'),
-                        'testUrl' => $this->urlBuilder->getUrl($this->controllerPath, ['id' => $id]),
+                        'testUrl' => $this->url->getUrl($this->controllerPath, ['id' => $id]),
                         'buttonClasses' => 'nx6py-test-connection-btn',
                         'sortOrder' => 70,
                     ],

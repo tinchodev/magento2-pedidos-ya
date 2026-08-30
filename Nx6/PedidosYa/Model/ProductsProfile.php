@@ -9,6 +9,7 @@ use Nx6\PedidosYa\Model\ResourceModel\ProductsProfile as ProductsProfileResource
 
 class ProductsProfile extends AbstractModel
 {
+    #[\Override]
     protected function _construct(): void
     {
         $this->_init(ProductsProfileResource::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nx6\PedidosYa\Ui\Component\Form;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Nx6\PedidosYa\Model\Config\Source\Attributes;
@@ -25,12 +26,12 @@ class MappingModifier implements ModifierInterface
     /**
      * Name of the fieldset declared in both ui_component form XMLs.
      */
-    private const FIELDSET = 'mapping';
+    private const string FIELDSET = 'mapping';
 
     /**
      * Columns whose "default" cell should be a datepicker instead of a plain text input.
      */
-    private const DATE_COLUMNS = ['start_date', 'end_date'];
+    private const array DATE_COLUMNS = ['start_date', 'end_date'];
 
     public function __construct(
         private readonly Registry $coreRegistry,
@@ -44,11 +45,13 @@ class MappingModifier implements ModifierInterface
     ) {
     }
 
+    #[\Override]
     public function modifyData(array $data): array
     {
         return $data;
     }
 
+    #[\Override]
     public function modifyMeta(array $meta): array
     {
         $model = $this->coreRegistry->registry($this->registryKey);
@@ -166,7 +169,7 @@ class MappingModifier implements ModifierInterface
     }
 
     /**
-     * @param array<int, array{value: string, label: \Magento\Framework\Phrase}> $options
+     * @param array<int, array{value: string, label: Phrase}> $options
      */
     private function buildDefaultSelectField(string $column, array $options): array
     {

@@ -20,6 +20,7 @@ class PromotionSubType implements OptionSourceInterface
 
     public const ABSOLUTE_VALUE_OFF = 'absolute_value_off';
 
+    #[\Override]
     public function toOptionArray(): array
     {
         return [

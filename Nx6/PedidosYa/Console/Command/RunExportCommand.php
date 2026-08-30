@@ -24,13 +24,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RunExportCommand extends Command
 {
-    private const ARGUMENT_TYPE = 'type';
+    private const string ARGUMENT_TYPE = 'type';
 
-    private const ARGUMENT_VENDOR_ID = 'vendor-id';
+    private const string ARGUMENT_VENDOR_ID = 'vendor-id';
 
-    private const TYPE_PRODUCTS = 'products';
+    private const string TYPE_PRODUCTS = 'products';
 
-    private const TYPE_PROMO = 'promo';
+    private const string TYPE_PROMO = 'promo';
 
     public function __construct(
         private readonly State $appState,
@@ -43,6 +43,7 @@ class RunExportCommand extends Command
         parent::__construct($name);
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->setName('pedidosya:export:run');
@@ -61,11 +62,12 @@ class RunExportCommand extends Command
         parent::configure();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->appState->setAreaCode(Area::AREA_ADMINHTML);
-        } catch (LocalizedException $e) {
+        } catch (LocalizedException) {
             // Area code was already set by the bin/magento bootstrap - safe to ignore.
         }
 
@@ -91,8 +93,8 @@ class RunExportCommand extends Command
         $collection->addFieldToFilter('is_active', 1);
         $collection->setPageSize(1);
 
-        $profile = $collection->getFirstItem();
-        if (!$profile->getId()) {
+        $dataObject = $collection->getFirstItem();
+        if (!$dataObject->getId()) {
             $output->writeln(sprintf(
                 '<error>No active %s profile found for Vendor ID "%s".</error>',
                 $type,
@@ -103,18 +105,18 @@ class RunExportCommand extends Command
         }
 
         try {
-            $result = $this->exportRunner->run($profile);
+            $result = $this->exportRunner->run($dataObject);
             $output->writeln(sprintf('<info>[%s %s] %s</info>', $type, $vendorId, $result));
 
             return Command::SUCCESS;
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             $this->logger->error(sprintf(
                 'PedidosYa CLI export failed for %s vendor "%s": %s',
                 $type,
                 $vendorId,
-                $e->getMessage()
+                $throwable->getMessage()
             ));
-            $output->writeln(sprintf('<error>[%s %s] %s</error>', $type, $vendorId, $e->getMessage()));
+            $output->writeln(sprintf('<error>[%s %s] %s</error>', $type, $vendorId, $throwable->getMessage()));
 
             return Command::FAILURE;
         }

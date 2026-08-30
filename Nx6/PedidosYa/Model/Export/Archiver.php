@@ -19,9 +19,9 @@ use Psr\Log\LoggerInterface;
  */
 class Archiver
 {
-    private const XML_PATH_ENABLED = 'nx6_pedidosya/archive/enabled';
+    private const string XML_PATH_ENABLED = 'nx6_pedidosya/archive/enabled';
 
-    private const ARCHIVE_DIR = 'export/peya';
+    private const string ARCHIVE_DIR = 'export/peya';
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
@@ -52,8 +52,8 @@ class Archiver
 
             $this->tar->pack($sourcePath, $tarPath);
             $this->gz->pack($tarPath, $tarGzPath);
-        } catch (\Throwable $e) {
-            $this->logger->error(sprintf('PedidosYa export archiving failed for %s: %s', $filename, $e->getMessage()));
+        } catch (\Throwable $throwable) {
+            $this->logger->error(sprintf('PedidosYa export archiving failed for %s: %s', $filename, $throwable->getMessage()));
         } finally {
             if ($tarPath !== null && is_file($tarPath)) {
                 unlink($tarPath);

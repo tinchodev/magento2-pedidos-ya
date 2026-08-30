@@ -14,13 +14,14 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class Attributes implements OptionSourceInterface
 {
-    private const EXCLUDED_FRONTEND_INPUTS = ['media_image', 'gallery'];
+    private const array EXCLUDED_FRONTEND_INPUTS = ['media_image', 'gallery'];
 
     public function __construct(
         private readonly AttributeCollectionFactory $attributeCollectionFactory
     ) {
     }
 
+    #[\Override]
     public function toOptionArray(): array
     {
         $options = [
